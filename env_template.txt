@@ -1,0 +1,16 @@
+# OpenAI API Configuration
+OPENAI_API_KEY=your_openai_api_key_here
+
+# API Configuration
+API_HOST=localhost
+API_PORT=8000
+API_BASE_URL=http://localhost:8000
+
+# Environment
+ENVIRONMENT=development
+
+# Logging
+LOG_LEVEL=INFO
+
+# Note: Replace 'your_openai_api_key_here' with your actual OpenAI API key
+# Get it from: https://platform.openai.com/account/api-keys

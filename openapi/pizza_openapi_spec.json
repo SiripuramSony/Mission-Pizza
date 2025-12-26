@@ -1,0 +1,262 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Mission-Pizza API",
+    "description": "REST API for pizza ordering and management system",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {
+    "/api/pizzas": {
+      "get": {
+        "operationId": "listPizzas",
+        "summary": "List all available pizzas",
+        "description": "Retrieve the complete menu of available pizzas with prices and descriptions",
+        "tags": ["Menu"],
+        "responses": {
+          "200": {
+            "description": "List of available pizzas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Pizza"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/orders": {
+      "post": {
+        "operationId": "placeOrder",
+        "summary": "Place a new pizza order",
+        "description": "Create a new pizza order with specified details",
+        "tags": ["Orders"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid order request"
+          }
+        }
+      },
+      "get": {
+        "operationId": "listOrders",
+        "summary": "List all orders",
+        "description": "Retrieve all orders in the system",
+        "tags": ["Orders"],
+        "responses": {
+          "200": {
+            "description": "List of all orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/orders/{order_id}": {
+      "get": {
+        "operationId": "trackOrder",
+        "summary": "Track order status",
+        "description": "Get the current status and details of a specific order",
+        "tags": ["Orders"],
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The order ID to track"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Pizza": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Pizza ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Pizza name"
+          },
+          "description": {
+            "type": "string",
+            "description": "Pizza description"
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "description": "Price in INR"
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of ingredients"
+          }
+        },
+        "required": ["id", "name", "price"]
+      },
+      "OrderRequest": {
+        "type": "object",
+        "properties": {
+          "pizza_id": {
+            "type": "integer",
+            "description": "ID of the pizza to order"
+          },
+          "size": {
+            "type": "string",
+            "enum": ["small", "medium", "large"],
+            "description": "Pizza size"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Number of pizzas",
+            "default": 1
+          },
+          "address": {
+            "type": "string",
+            "description": "Delivery address"
+          },
+          "customer_name": {
+            "type": "string",
+            "description": "Customer name"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Customer phone number"
+          }
+        },
+        "required": ["pizza_id", "size", "address", "customer_name", "phone"]
+      },
+      "OrderResponse": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "Unique order identifier"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["confirmed", "preparing", "ready", "out_for_delivery", "delivered"],
+            "description": "Current order status"
+          },
+          "prep_time": {
+            "type": "string",
+            "description": "Estimated preparation time"
+          },
+          "total_price": {
+            "type": "number",
+            "description": "Total order price"
+          },
+          "estimated_delivery_time": {
+            "type": "string",
+            "description": "ISO 8601 datetime for estimated delivery"
+          }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string"
+          },
+          "pizza_id": {
+            "type": "integer"
+          },
+          "pizza_name": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer"
+          },
+          "address": {
+            "type": "string"
+          },
+          "customer_name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "total_price": {
+            "type": "number"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "estimated_delivery_time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}
