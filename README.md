@@ -48,21 +48,6 @@ python main.py
 
 The API runs on `http://localhost:8000` and the documentation is available at `http://localhost:8000/docs`.
 
-## Project Structure
-
-mission‑pizza/
-├── src/
-│ ├── models.py
-│ ├── mock_pizza_api.py
-│ ├── mcp_generator.py
-│ ├── pizza_mcp_server.py
-│ ├── ordering_agent.py
-│ └── scheduling_agent.py
-├── openapi/
-│ └── pizza_openapi_spec.json
-├── main.py
-├── requirements.txt
-└── .env
 
 ## Example Usage
 Step 1: menu
